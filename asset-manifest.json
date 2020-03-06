@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/massive-forms/static/css/main.c18b29b0.chunk.css",
+    "main.js": "/massive-forms/static/js/main.fec9d54f.chunk.js",
+    "main.js.map": "/massive-forms/static/js/main.fec9d54f.chunk.js.map",
+    "runtime-main.js": "/massive-forms/static/js/runtime-main.bc6f5091.js",
+    "runtime-main.js.map": "/massive-forms/static/js/runtime-main.bc6f5091.js.map",
+    "static/js/2.1a814a10.chunk.js": "/massive-forms/static/js/2.1a814a10.chunk.js",
+    "static/js/2.1a814a10.chunk.js.map": "/massive-forms/static/js/2.1a814a10.chunk.js.map",
+    "index.html": "/massive-forms/index.html",
+    "precache-manifest.086cce0c259496ad43890ab17acac165.js": "/massive-forms/precache-manifest.086cce0c259496ad43890ab17acac165.js",
+    "service-worker.js": "/massive-forms/service-worker.js",
+    "static/css/main.c18b29b0.chunk.css.map": "/massive-forms/static/css/main.c18b29b0.chunk.css.map",
+    "static/js/2.1a814a10.chunk.js.LICENSE.txt": "/massive-forms/static/js/2.1a814a10.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/massive-forms/static/media/emoji.10c362f2.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.bc6f5091.js",
+    "static/js/2.1a814a10.chunk.js",
+    "static/css/main.c18b29b0.chunk.css",
+    "static/js/main.fec9d54f.chunk.js"
+  ]
+}
