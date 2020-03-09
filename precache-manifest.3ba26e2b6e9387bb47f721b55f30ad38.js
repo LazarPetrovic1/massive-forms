@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7e72c49d02e1e20eb6423a75660e52f0",
+    "revision": "3c4b67e2efec27f6c95a0caed60e86ad",
     "url": "/massive-forms/index.html"
   },
   {
-    "revision": "9510b94869b813f18fa0",
-    "url": "/massive-forms/static/css/main.c18b29b0.chunk.css"
+    "revision": "f93f2b4697a4234da0bb",
+    "url": "/massive-forms/static/css/main.fc443918.chunk.css"
   },
   {
-    "revision": "1a54e43e771e5c4d5bbe",
-    "url": "/massive-forms/static/js/2.1a814a10.chunk.js"
+    "revision": "d2d2ba0d0f5465e1e624",
+    "url": "/massive-forms/static/js/2.ba951cbe.chunk.js"
   },
   {
     "revision": "f231859d6585c4cd5f80c344783ed269",
-    "url": "/massive-forms/static/js/2.1a814a10.chunk.js.LICENSE.txt"
+    "url": "/massive-forms/static/js/2.ba951cbe.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "9510b94869b813f18fa0",
-    "url": "/massive-forms/static/js/main.fec9d54f.chunk.js"
+    "revision": "f93f2b4697a4234da0bb",
+    "url": "/massive-forms/static/js/main.61547d96.chunk.js"
   },
   {
     "revision": "07e1c0558321e65e7ba8",
