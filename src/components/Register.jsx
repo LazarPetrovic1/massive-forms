@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useRef } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import countries from '../utils/countries.js'
 import Camera from './Camera'
 
@@ -15,7 +15,16 @@ const Register = () => {
     password: '',
     password2: '',
     phone: '',
-    callcode: ''
+    callcode: '',
+    question: '',
+    questions: [
+      'Where were you when the funniest thing happened to you?',
+      'What is/was the full name of one of your parents?',
+      "What was your first pet's name?",
+      'Who was your teacher in 1st grade?',
+      'How many siblings do you have?',
+      'What is your most interesting memory?'
+    ]
   })
 
   const [viewPass, setViewPass] = useState(false)
@@ -36,7 +45,9 @@ const Register = () => {
     password,
     password2,
     phone,
-    callcode
+    callcode,
+    question,
+    questions
   } = data
 
   const onChange = e => {
@@ -49,15 +60,17 @@ const Register = () => {
     console.log({
       firstName,
       lastName,
-      email,
-      password,
-      password2,
       username,
       city,
       country,
       zip,
+      email,
       security,
-      phone
+      password,
+      password2,
+      phone,
+      callcode,
+      question
     })
   }
 
@@ -68,6 +81,7 @@ const Register = () => {
         setData({ ...data, callcode: callcode[0].callcode })
       }
     }())
+    // eslint-disable-next-line
   }, [country])
 
   const onProgressChange = val => {
@@ -141,8 +155,8 @@ const Register = () => {
               <div className='carousel-item active'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2'>Your basic personal information</h2>
-                    <label htmlFor='firstName'>First name</label>
+                    <h2 className='mb-2 white'>Your basic personal information</h2>
+                    <label htmlFor='firstName' className='white'>First name</label>
                     <input
                       type='text'
                       onChange={onChange}
@@ -162,7 +176,7 @@ const Register = () => {
                         Please enter your name.
                       </div>
                     )}
-                    <label htmlFor='lastName'>Last name</label>
+                    <label className='white' htmlFor='lastName'>Last name</label>
                     <input
                       type='text'
                       className={
@@ -182,7 +196,7 @@ const Register = () => {
                         Please enter your name.
                       </div>
                     )}
-                    <label htmlFor='email'>E-mail</label>
+                    <label htmlFor='email' className='white'>E-mail</label>
                     <input
                       type='email'
                       className={
@@ -208,8 +222,8 @@ const Register = () => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2'>Your basic profile information</h2>
-                    <label htmlFor='username'>Username</label>
+                    <h2 className='mb-2 white'>Your basic profile information</h2>
+                    <label htmlFor='username' className='white'>Username</label>
                     <div className='input-group'>
                       <div className='input-group-prepend'>
                         <span
@@ -240,7 +254,7 @@ const Register = () => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password'>Password</label>
+                      <label htmlFor='password' className='white'>Password</label>
                       <input
                         type={viewPass ? 'text' : 'password'}
                         name='password'
@@ -273,7 +287,7 @@ const Register = () => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password2'>Password</label>
+                      <label htmlFor='password2' className='white'>Password</label>
                       <input
                         type={viewPass2 ? 'text' : 'password'}
                         name='password2'
@@ -312,8 +326,8 @@ const Register = () => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2'>Advanced personal information</h2>
-                    <label htmlFor='city'>City</label>
+                    <h2 className='mb-2 white'>Advanced personal information</h2>
+                    <label htmlFor='city' className='white'>City</label>
                     <input
                       type='text'
                       className={
@@ -333,7 +347,7 @@ const Register = () => {
                         Please enter your city
                       </div>
                     )}
-                    <label htmlFor='country'>Country</label>
+                    <label htmlFor='country' className='white'>Country</label>
                     <select
                       onChange={onChange}
                       name='country'
@@ -360,7 +374,7 @@ const Register = () => {
                         Please select your country
                       </div>
                     )}
-                    <label htmlFor='zip'>Zip Code</label>
+                    <label htmlFor='zip' className='white'>Zip Code</label>
                     <input
                       type='text'
                       name='zip'
@@ -419,8 +433,8 @@ const Register = () => {
                       className='container-md scroller'
                       style={{ userSelect: 'none' }}
                     >
-                      <h2>License, terms and conditions</h2>
-                      <p className='lead'>
+                      <h2 className='white'>License, terms and conditions</h2>
+                      <p className='lead white'>
                         Lorem ipsum dolor sit amet, consectetur adipisicing
                         elit. Repellendus architecto ipsum eaque sit,
                         consectetur a laborum quod autem deserunt amet qui
@@ -457,7 +471,7 @@ const Register = () => {
                         aut harum consequatur, quas! Harum eveniet tempora
                         numquam natus ab tempore ducimus.
                       </p>
-                      <p className='display-3'>
+                      <p className='display-3 white'>
                         You have to agree before you can create an account.
                       </p>
                     </article>
@@ -494,14 +508,27 @@ const Register = () => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '30%' }}>
-                    <h2>Add a security answer</h2>
-                    <p className='lead'>
-                      What is/was the full name of one of your parents?
-                    </p>
-                    <label htmlFor='security'>Answer</label>
+                    <h2 className='white'>Add a security answer</h2>
+                    <select
+                      onChange={(e) => setData({ ...data, question: e.target.value })}
+                      name='questions'
+                      className={
+                        question
+                          ? 'form-control is-valid'
+                          : 'form-control is-invalid'
+                      }
+                      required
+                    >
+                      <option value=''>-- Choose one --</option>
+                      {questions.map(quest => (
+                        <option value={quest} key={quest}>{quest}</option>
+                      ))}
+                    </select>
+                    <label htmlFor='security' className='white'>Answer</label>
                     <input
                       type='text'
                       name='security'
+                      disabled={!question}
                       onChange={onChange}
                       className={
                         security
@@ -524,7 +551,7 @@ const Register = () => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <article style={{marginTop: '2rem'}}>
-                    <h2 style={{ marginBottom: '1rem' }}>
+                    <h2 style={{ marginBottom: '1rem' }} className='white'>
                       Please take a picture of yourself for additional security (<b>compeletely optional</b>)
                     </h2>
                     <Camera onCapture={(blob) => setImage(blob)} onClear={() => setImage(null)} />
@@ -542,28 +569,28 @@ const Register = () => {
                       Overview of your information:
                     </h2>
                     <ul className='list-group' style={{ marginBottom: '2rem' }}>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         Name: {firstName && lastName ? (
                           <span className='text-success'>{firstName} {lastName}</span>
                         ) : (
                           <span className='text-danger'>No name given.</span>
                         )}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         E-mail: {email ? (
                           <span className='text-success'>{email}</span>
                         ) : (
                           <span className='text-danger'>No e-mail given.</span>
                         )}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         Username: {username ? (
                           <span className='text-success'>@{username}</span>
                         ) : (
                           <span className='text-danger'>No username is currently set.</span>
                         )}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         From:{' '}
                         {zip && city && country ? (
                           <span className='text-success'>{zip} - {city}, {country}</span>
@@ -571,17 +598,17 @@ const Register = () => {
                           <span className='text-danger'>No location set.</span>
                         )}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         Security question: {security ? (
                           <span className='text-success'>{security}</span>
                         ) : (
                           <span className='text-danger'>No answer given.</span>
                         )}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         Image taken for security:&nbsp;&nbsp;{image ? <span className='text-success'>yes</span> : <span className='text-danger'>no</span>}
                       </li>
-                      <li className='list-group-item list-group-item-action'>
+                      <li className='overview-items list-group-item list-group-item-action'>
                         Your phone number: {phone ? (
                           <span className='text-success'>{callcode}{phone}</span>
                         ) : (

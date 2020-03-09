@@ -151,7 +151,7 @@ const CAPTURE_OPTIONS = {
 export function Camera ({ onCapture, onClear }) {
   const canvasRef = useRef()
   const videoRef = useRef()
-  const [imgs, setImgs] = useState(null)
+  // const [imgs, setImgs] = useState(null)
 
   const [container, setContainer] = useState({ width: 0, height: 0 })
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
