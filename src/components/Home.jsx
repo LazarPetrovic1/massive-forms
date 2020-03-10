@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-const Home = () => {
+import { connect } from 'react-redux'
+import { logout } from '../actions/auth'
+
+const Home = (props) => {
   const [see, setSee] = useState(true)
+  const { logout, auth } = props
 
   return (
     <div className='container'>
@@ -38,8 +42,15 @@ const Home = () => {
         </p>
         <p className='display-3 p-5 white'>Lorem ipsum dolor sit amet, consectetur.</p>
       </div>
+      <button onClick={logout} className='btn btn-info btn-block btn-lg' style={{display: see ? 'block' : 'none'}}>
+        Log out
+      </button>
     </div>
   )
 }
 
-export default Home
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, { logout })(Home)

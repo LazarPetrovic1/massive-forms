@@ -1,8 +1,12 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import countries from '../utils/countries.js'
 import Camera from './Camera'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { register } from '../actions/auth'
+import { Link, Redirect } from 'react-router-dom'
 
-const Register = () => {
+const Register = props => {
   const [data, setData] = useState({
     firstName: '',
     lastName: '',
@@ -17,6 +21,8 @@ const Register = () => {
     phone: '',
     callcode: '',
     question: '',
+    sex: '',
+    bio: '',
     questions: [
       'Where were you when the funniest thing happened to you?',
       'What is/was the full name of one of your parents?',
@@ -36,41 +42,65 @@ const Register = () => {
   const {
     firstName,
     lastName,
+    email,
+    bio,
     username,
+    password,
     city,
     country,
     zip,
-    email,
     security,
-    password,
     password2,
     phone,
     callcode,
     question,
-    questions
+    questions,
+    sex
   } = data
+
+  const { register, isAuthenticated } = props
 
   const onChange = e => {
     e.persist()
     setData({ ...data, [e.target.name]: e.target.value })
   }
+
   const onSubmit = e => {
     e.preventDefault()
+
+    const phoneNr = `${callcode}${phone}`
+    const imageTaken = image ? true : false
 
     console.log({
       firstName,
       lastName,
+      email,
+      sex,
       username,
+      password,
       city,
       country,
       zip,
-      email,
+      phone: phoneNr,
+      question,
       security,
+      imageTaken
+    })
+
+    register({
+      firstName,
+      lastName,
+      email,
+      sex,
+      username,
       password,
-      password2,
-      phone,
-      callcode,
-      question
+      city,
+      country,
+      zip,
+      phone: phoneNr,
+      question,
+      security,
+      imageTaken: image ? true : false
     })
   }
 
@@ -80,9 +110,13 @@ const Register = () => {
         const callcode = countries.filter(ctry => ctry.name === country)
         setData({ ...data, callcode: callcode[0].callcode })
       }
-    }())
+    })()
     // eslint-disable-next-line
-  }, [country])
+  }, [country]);
+
+  if (isAuthenticated) {
+    return <Redirect to='/' />
+  }
 
   const onProgressChange = val => {
     let newValue = progress + val
@@ -115,31 +149,36 @@ const Register = () => {
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='1'
-              onClick={() => setProgress(17)}
+              onClick={() => setProgress(15)}
             />
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='2'
-              onClick={() => setProgress(34)}
+              onClick={() => setProgress(30)}
             />
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='3'
-              onClick={() => setProgress(51)}
+              onClick={() => setProgress(45)}
             />
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='4'
-              onClick={() => setProgress(68)}
+              onClick={() => setProgress(60)}
             />
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='5'
-              onClick={() => setProgress(85)}
+              onClick={() => setProgress(75)}
             />
             <li
               data-target='#carouselExampleIndicators'
               data-slide-to='6'
+              onClick={() => setProgress(90)}
+            />
+            <li
+              data-target='#carouselExampleIndicators'
+              data-slide-to='7'
               onClick={() => setProgress(100)}
             />
           </ol>
@@ -154,9 +193,13 @@ const Register = () => {
             <form onSubmit={onSubmit}>
               <div className='carousel-item active'>
                 <div className='w-75 h-100 m-auto'>
-                  <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2 white'>Your basic personal information</h2>
-                    <label htmlFor='firstName' className='white'>First name</label>
+                  <div style={{ marginTop: '20%' }}>
+                    <h2 className='mb-2 white'>
+                      Your basic personal information
+                    </h2>
+                    <label htmlFor='firstName' className='white'>
+                      First name
+                    </label>
                     <input
                       type='text'
                       onChange={onChange}
@@ -176,7 +219,9 @@ const Register = () => {
                         Please enter your name.
                       </div>
                     )}
-                    <label className='white' htmlFor='lastName'>Last name</label>
+                    <label className='white' htmlFor='lastName'>
+                      Last name
+                    </label>
                     <input
                       type='text'
                       className={
@@ -196,7 +241,9 @@ const Register = () => {
                         Please enter your name.
                       </div>
                     )}
-                    <label htmlFor='email' className='white'>E-mail</label>
+                    <label htmlFor='email' className='white'>
+                      E-mail
+                    </label>
                     <input
                       type='email'
                       className={
@@ -216,14 +263,88 @@ const Register = () => {
                         Please enter your e-mail address.
                       </div>
                     )}
+                    <label htmlFor='sex' className='mt-4 white'>
+                      Your sex
+                    </label>
+                    <div className='custom-control custom-radio'>
+                      <input
+                        type='radio'
+                        id='male'
+                        name='sex'
+                        className={
+                          sex === 'm'
+                            ? 'custom-control-input is-valid'
+                            : 'custom-control-input is-invalid'
+                        }
+                        value='m'
+                        onChange={onChange}
+                      />
+                      <label
+                        className='custom-control-label white'
+                        htmlFor='male'
+                      >
+                        Male
+                      </label>
+                    </div>
+                    <div className='custom-control custom-radio'>
+                      <input
+                        type='radio'
+                        id='female'
+                        name='sex'
+                        className={
+                          sex === 'f'
+                            ? 'custom-control-input is-valid'
+                            : 'custom-control-input is-invalid'
+                        }
+                        value='f'
+                        onChange={onChange}
+                      />
+                      <label
+                        className='custom-control-label white'
+                        htmlFor='female'
+                      >
+                        Female
+                      </label>
+                    </div>
+                    <div className='custom-control custom-radio'>
+                      <input
+                        type='radio'
+                        id='unknown'
+                        name='sex'
+                        className={
+                          sex === 'n/a'
+                            ? 'custom-control-input is-valid'
+                            : 'custom-control-input is-invalid'
+                        }
+                        value='n/a'
+                        onChange={onChange}
+                      />
+                      <label
+                        className='custom-control-label white'
+                        htmlFor='unknown'
+                      >
+                        I do not wish to specify
+                      </label>
+                    </div>
                   </div>
+                  {sex ? (
+                    <div className='valid-feedback' style={{display: 'block'}}>Looks good!</div>
+                  ) : (
+                    <div className='invalid-feedback' style={{display: 'block'}}>
+                      Please choose your sex
+                    </div>
+                  )}
                 </div>
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2 white'>Your basic profile information</h2>
-                    <label htmlFor='username' className='white'>Username</label>
+                    <h2 className='mb-2 white'>
+                      Your basic profile information
+                    </h2>
+                    <label htmlFor='username' className='white'>
+                      Username
+                    </label>
                     <div className='input-group'>
                       <div className='input-group-prepend'>
                         <span
@@ -254,7 +375,9 @@ const Register = () => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password' className='white'>Password</label>
+                      <label htmlFor='password' className='white'>
+                        Password
+                      </label>
                       <input
                         type={viewPass ? 'text' : 'password'}
                         name='password'
@@ -287,7 +410,9 @@ const Register = () => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password2' className='white'>Password</label>
+                      <label htmlFor='password2' className='white'>
+                        Password
+                      </label>
                       <input
                         type={viewPass2 ? 'text' : 'password'}
                         name='password2'
@@ -325,9 +450,43 @@ const Register = () => {
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
+                  <div style={{ marginTop: '10%' }}>
+                    <h2 className='mb-2 white'>
+                      Tell us a little bit about yourself
+                    </h2>
+                    <label htmlFor='bio' className='white'>Your bio: </label>
+                    <textarea
+                      className={bio ? 'form-control is-valid' : 'form-control is-invalid'}
+                      placeholder='Write something about yourself'
+                      name='bio'
+                      id='bio'
+                      onChange={onChange}
+                    >
+                      Tell us
+                    </textarea>
+                    {
+                      bio ? (
+                        <div className='valid-feedback mt-5'>
+                          Looks good!
+                        </div>
+                      ) : (
+                        <div className='invalid-feedback mt-5'>
+                          Please tell us a little bit about yourself.
+                        </div>
+                      )
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className='carousel-item'>
+                <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '25%' }}>
-                    <h2 className='mb-2 white'>Advanced personal information</h2>
-                    <label htmlFor='city' className='white'>City</label>
+                    <h2 className='mb-2 white'>
+                      Advanced personal information
+                    </h2>
+                    <label htmlFor='city' className='white'>
+                      City
+                    </label>
                     <input
                       type='text'
                       className={
@@ -347,11 +506,14 @@ const Register = () => {
                         Please enter your city
                       </div>
                     )}
-                    <label htmlFor='country' className='white'>Country</label>
+                    <label htmlFor='country' className='white'>
+                      Country
+                    </label>
                     <select
-                      onChange={onChange}
+                      onChange={e =>
+                        setData({ ...data, country: e.target.value })
+                      }
                       name='country'
-                      value={country}
                       className={
                         country
                           ? 'form-control is-valid'
@@ -374,7 +536,9 @@ const Register = () => {
                         Please select your country
                       </div>
                     )}
-                    <label htmlFor='zip' className='white'>Zip Code</label>
+                    <label htmlFor='zip' className='white'>
+                      Zip Code
+                    </label>
                     <input
                       type='text'
                       name='zip'
@@ -394,7 +558,8 @@ const Register = () => {
                         Please enter your zip code
                       </div>
                     )}
-                    <div className='input-group mt-3'>
+                    <label htmlFor='phone mt-3'>Your phone number</label>
+                    <div className='input-group'>
                       <div className='input-group-prepend'>
                         <span
                           className='input-group-text'
@@ -509,8 +674,13 @@ const Register = () => {
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '30%' }}>
                     <h2 className='white'>Add a security answer</h2>
+                    <label htmlFor='question' className='mt-2'>
+                      Choose a question
+                    </label>
                     <select
-                      onChange={(e) => setData({ ...data, question: e.target.value })}
+                      onChange={e =>
+                        setData({ ...data, question: e.target.value })
+                      }
                       name='questions'
                       className={
                         question
@@ -521,10 +691,14 @@ const Register = () => {
                     >
                       <option value=''>-- Choose one --</option>
                       {questions.map(quest => (
-                        <option value={quest} key={quest}>{quest}</option>
+                        <option value={quest} key={quest}>
+                          {quest}
+                        </option>
                       ))}
                     </select>
-                    <label htmlFor='security' className='white'>Answer</label>
+                    <label htmlFor='security' className='white mt-2'>
+                      Answer
+                    </label>
                     <input
                       type='text'
                       name='security'
@@ -550,11 +724,15 @@ const Register = () => {
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
-                  <article style={{marginTop: '2rem'}}>
+                  <article style={{ marginTop: '2rem' }}>
                     <h2 style={{ marginBottom: '1rem' }} className='white'>
-                      Please take a picture of yourself for additional security (<b>compeletely optional</b>)
+                      Please take a picture of yourself for additional security
+                      (<b>compeletely optional</b>)
                     </h2>
-                    <Camera onCapture={(blob) => setImage(blob)} onClear={() => setImage(null)} />
+                    <Camera
+                      onCapture={blob => setImage(blob)}
+                      onClear={() => setImage(null)}
+                    />
                     <small className='d-block bg-light lead text-secondary mt-4'>
                       Please note that this image will be discarded after the
                       registration process
@@ -570,49 +748,84 @@ const Register = () => {
                     </h2>
                     <ul className='list-group' style={{ marginBottom: '2rem' }}>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        Name: {firstName && lastName ? (
-                          <span className='text-success'>{firstName} {lastName}</span>
+                        Name:{' '}
+                        {firstName && lastName ? (
+                          <span className='text-success'>
+                            {firstName} {lastName}
+                          </span>
                         ) : (
                           <span className='text-danger'>No name given.</span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        E-mail: {email ? (
+                        Sex:{' '}
+                        {sex === 'm' ? (
+                          <span className='text-success'>male</span>
+                        ) : sex === 'f' ? (
+                          <span className='text-success'>female</span>
+                        ) : sex === 'n/a' ? (
+                          <span className='text-success'>
+                            didn't wish to specify
+                          </span>
+                        ) : (
+                          <span className='text-danger'>No gender given.</span>
+                        )}
+                      </li>
+                      <li className='overview-items list-group-item list-group-item-action'>
+                        E-mail:{' '}
+                        {email ? (
                           <span className='text-success'>{email}</span>
                         ) : (
                           <span className='text-danger'>No e-mail given.</span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        Username: {username ? (
+                        Username:{' '}
+                        {username ? (
                           <span className='text-success'>@{username}</span>
                         ) : (
-                          <span className='text-danger'>No username is currently set.</span>
+                          <span className='text-danger'>
+                            No username is currently set.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         From:{' '}
                         {zip && city && country ? (
-                          <span className='text-success'>{zip} - {city}, {country}</span>
+                          <span className='text-success'>
+                            {zip} - {city}, {country}
+                          </span>
                         ) : (
                           <span className='text-danger'>No location set.</span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        Security question: {security ? (
+                        Security question:{' '}
+                        {security ? (
                           <span className='text-success'>{security}</span>
                         ) : (
                           <span className='text-danger'>No answer given.</span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        Image taken for security:&nbsp;&nbsp;{image ? <span className='text-success'>yes</span> : <span className='text-danger'>no</span>}
+                        Image taken for security:&nbsp;&nbsp;
+                        {image ? (
+                          <span className='text-success'>yes</span>
+                        ) : (
+                          <span className='text-danger'>no</span>
+                        )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        Your phone number: {phone ? (
-                          <span className='text-success'>{callcode}{phone}</span>
+                        Your phone number:{' '}
+                        {phone ? (
+                          <span className='text-success'>
+                            {callcode}
+                            {phone}
+                          </span>
                         ) : (
-                          <span className='text-danger'>No phone number was given</span>
+                          <span className='text-danger'>
+                            No phone number was given
+                          </span>
                         )}
                       </li>
                     </ul>
@@ -623,6 +836,8 @@ const Register = () => {
                         !firstName ||
                         !lastName ||
                         !username ||
+                        !bio ||
+                        !sex ||
                         !city ||
                         !country ||
                         !zip ||
@@ -645,7 +860,7 @@ const Register = () => {
               href='#carouselExampleIndicators'
               role='button'
               data-slide='prev'
-              onClick={() => onProgressChange(-17)}
+              onClick={() => onProgressChange(-15)}
             >
               <span
                 className='carousel-control-prev-icon text-primary'
@@ -660,7 +875,7 @@ const Register = () => {
               href='#carouselExampleIndicators'
               role='button'
               data-slide='next'
-              onClick={() => onProgressChange(17)}
+              onClick={() => onProgressChange(15)}
             >
               <span
                 className='carousel-control-next-icon text-primary'
@@ -675,4 +890,16 @@ const Register = () => {
   )
 }
 
-export default Register
+Register.propTypes = {
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+}
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(
+  mapStateToProps,
+  { register }
+)(Register)
