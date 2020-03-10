@@ -7,6 +7,7 @@ import Register from './components/Register'
 import NotFound from './components/NotFound'
 import Nav from './components/Nav'
 import PrivateRoute from './components/PrivateRoute'
+import Login from './components/Login'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -31,6 +32,7 @@ function App (props) {
           <Switch>
             <PrivateRoute exact path='/' component={Home} />
             <Route exact path='/register' component={Register} />
+            <Route exact path='/login' component={Login} />
             <Route component={NotFound} />
           </Switch>
         </Fragment>

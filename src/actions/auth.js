@@ -6,7 +6,6 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  DELETE_ACCOUNT,
   CLEAR_PROFILE
 } from './types'
 import axios from 'axios'
@@ -41,6 +40,7 @@ export const register = ({
   lastName,
   email,
   sex,
+  bio,
   username,
   password,
   city,
@@ -62,6 +62,7 @@ export const register = ({
     lastName,
     email,
     sex,
+    bio,
     username,
     password,
     city,
@@ -90,14 +91,22 @@ export const register = ({
   }
 }
 
-export const login = (email, password) => async dispatch => {
+export const login = ({email, username, phone, password}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   }
 
-  const body = JSON.stringify({ email, password })
+  let body
+
+  if (email) {
+    body = JSON.stringify({ email, password })
+  } else if (username) {
+    body = JSON.stringify({ username, password })
+  } else if (phone) {
+    body = JSON.stringify({ phone, password })
+  }
 
   try {
     const res = await axios.post('/auth', body, config)

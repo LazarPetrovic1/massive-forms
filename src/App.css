@@ -209,3 +209,38 @@ select {
 .overview-items:hover {
   background-color: #aecdd1;
 }
+
+.pop-up {
+  text-align: center;
+}
+
+.flexer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bg {
+  cursor: pointer;
+  padding: 3.5rem;
+  transition: 200ms all linear;
+}
+
+.bg:hover {
+  background-color: #1e5673;
+}
+
+.items-enter {
+  opacity: 0;
+}
+.items-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.items-exit {
+  opacity: 1;
+}
+.items-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}

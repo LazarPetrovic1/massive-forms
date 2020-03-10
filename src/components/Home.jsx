@@ -4,7 +4,7 @@ import { logout } from '../actions/auth'
 
 const Home = (props) => {
   const [see, setSee] = useState(true)
-  const { logout, auth } = props
+  const { logout } = props
 
   return (
     <div className='container'>

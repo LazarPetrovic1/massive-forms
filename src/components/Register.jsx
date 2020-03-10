@@ -4,12 +4,17 @@ import Camera from './Camera'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { register } from '../actions/auth'
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
+import DatePicker from 'react-datepicker'
+import Moment from 'react-moment'
+// Stylesheets
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Register = props => {
   const [data, setData] = useState({
     firstName: '',
     lastName: '',
+    dob: '',
     username: '',
     city: '',
     country: '',
@@ -43,6 +48,7 @@ const Register = props => {
     firstName,
     lastName,
     email,
+    dob,
     bio,
     username,
     password,
@@ -58,7 +64,10 @@ const Register = props => {
     sex
   } = data
 
-  const { register, isAuthenticated } = props
+  const {
+    register,
+    isAuthenticated
+  } = props
 
   const onChange = e => {
     e.persist()
@@ -76,6 +85,7 @@ const Register = props => {
       lastName,
       email,
       sex,
+      dob,
       username,
       password,
       city,
@@ -92,6 +102,8 @@ const Register = props => {
       lastName,
       email,
       sex,
+      bio,
+      dob,
       username,
       password,
       city,
@@ -101,6 +113,13 @@ const Register = props => {
       question,
       security,
       imageTaken: image ? true : false
+    })
+  }
+
+  const setDate = date => {
+    setData({
+      ...data,
+      dob: date
     })
   }
 
@@ -138,7 +157,10 @@ const Register = props => {
         <div className='container text-center'>
           <ol
             className='carousel-indicators'
-            style={{ backgroundColor: '#bbb', bottom: '6rem' }}
+            style={{
+              backgroundColor: '#bbb',
+              bottom: '6rem'
+            }}
           >
             <li
               data-target='#carouselExampleIndicators'
@@ -263,7 +285,10 @@ const Register = props => {
                         Please enter your e-mail address.
                       </div>
                     )}
-                    <label htmlFor='sex' className='mt-4 white'>
+                    <label
+                      htmlFor='sex'
+                      className='mt-4 white'
+                    >
                       Your sex
                     </label>
                     <div className='custom-control custom-radio'>
@@ -328,9 +353,17 @@ const Register = props => {
                     </div>
                   </div>
                   {sex ? (
-                    <div className='valid-feedback' style={{display: 'block'}}>Looks good!</div>
+                    <div
+                      className='valid-feedback'
+                      style={{ display: 'block' }}
+                    >
+                      Looks good!
+                    </div>
                   ) : (
-                    <div className='invalid-feedback' style={{display: 'block'}}>
+                    <div
+                      className='invalid-feedback'
+                      style={{ display: 'block' }}
+                    >
                       Please choose your sex
                     </div>
                   )}
@@ -342,7 +375,10 @@ const Register = props => {
                     <h2 className='mb-2 white'>
                       Your basic profile information
                     </h2>
-                    <label htmlFor='username' className='white'>
+                    <label
+                      htmlFor='username'
+                      className='white'
+                    >
                       Username
                     </label>
                     <div className='input-group'>
@@ -367,7 +403,9 @@ const Register = props => {
                         required
                       />
                       {username.length > 2 ? (
-                        <div className='valid-feedback'>Looks good!</div>
+                        <div className='valid-feedback'>
+                          Looks good!
+                        </div>
                       ) : (
                         <div className='invalid-feedback'>
                           Please enter your username.
@@ -375,7 +413,10 @@ const Register = props => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password' className='white'>
+                      <label
+                        htmlFor='password'
+                        className='white'
+                      >
                         Password
                       </label>
                       <input
@@ -402,7 +443,9 @@ const Register = props => {
                         />
                       )}
                       {password.length > 2 ? (
-                        <div className='valid-feedback'>Looks good!</div>
+                        <div className='valid-feedback'>
+                          Looks good!
+                        </div>
                       ) : (
                         <div className='invalid-feedback'>
                           Please enter your name.
@@ -410,7 +453,10 @@ const Register = props => {
                       )}
                     </div>
                     <div className='form-group rel'>
-                      <label htmlFor='password2' className='white'>
+                      <label
+                        htmlFor='password2'
+                        className='white'
+                      >
                         Password
                       </label>
                       <input
@@ -437,8 +483,12 @@ const Register = props => {
                           onClick={() => setViewPass2(true)}
                         />
                       )}
-                      {password2.length >= 5 && password2 === password ? (
-                        <div className='valid-feedback'>Looks good!</div>
+                      {
+                        password2.length >= 5 &&
+                        password2 === password ? (
+                          <div className='valid-feedback'>
+                          Looks good!
+                        </div>
                       ) : (
                         <div className='invalid-feedback'>
                           Password not confirmed.
@@ -450,41 +500,84 @@ const Register = props => {
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
-                  <div style={{ marginTop: '10%' }}>
+                  <div style={{ marginTop: '15%' }}>
                     <h2 className='mb-2 white'>
                       Tell us a little bit about yourself
                     </h2>
-                    <label htmlFor='bio' className='white'>Your bio: </label>
+                    <label
+                      htmlFor='bio'
+                      className='white'
+                    >
+                      Your bio:{' '}
+                    </label>
                     <textarea
-                      className={bio ? 'form-control is-valid' : 'form-control is-invalid'}
+                      className={
+                        bio
+                          ? 'form-control is-valid'
+                          : 'form-control is-invalid'
+                      }
                       placeholder='Write something about yourself'
                       name='bio'
+                      value={bio}
                       id='bio'
                       onChange={onChange}
                     >
                       Tell us
                     </textarea>
-                    {
-                      bio ? (
-                        <div className='valid-feedback mt-5'>
-                          Looks good!
-                        </div>
-                      ) : (
-                        <div className='invalid-feedback mt-5'>
-                          Please tell us a little bit about yourself.
-                        </div>
-                      )
-                    }
+                    {bio ? (
+                      <div className='valid-feedback mt-5'>
+                        Looks good!
+                      </div>
+                    ) : (
+                      <div className='invalid-feedback mt-5'>
+                        Please tell us a little bit about yourself.
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
-                  <div style={{ marginTop: '25%' }}>
+                  <div style={{ marginTop: '10%' }}>
                     <h2 className='mb-2 white'>
                       Advanced personal information
                     </h2>
-                    <label htmlFor='city' className='white'>
+                    <label
+                      htmlFor='dob'
+                      className='white'
+                    >
+                      Date of birth
+                    </label>
+                    <br />
+                    <DatePicker
+                      name='dob'
+                      id='dob'
+                      showYearDropdown
+                      yearDropdownItemNumber={150}
+                      scrollableYearDropdown
+                      className={
+                        dob
+                          ? `form-control is-valid`
+                          : 'form-control is-invalid'
+                      }
+                      value={dob}
+                      selected={dob}
+                      onChange={setDate}
+                    />
+                    <br />
+                    {dob ? (
+                      <div className='valid-feedback d-block'>
+                        Looks good!
+                      </div>
+                    ) : (
+                      <div className='invalid-feedback d-block'>
+                        Please enter your date of birth.
+                      </div>
+                    )}
+                    <label
+                      htmlFor='city'
+                      className='white mt-2'
+                    >
                       City
                     </label>
                     <input
@@ -500,13 +593,18 @@ const Register = props => {
                       required
                     />
                     {city ? (
-                      <div className='valid-feedback'>Looks good!</div>
+                      <div className='valid-feedback'>
+                        Looks good!
+                      </div>
                     ) : (
                       <div className='invalid-feedback'>
                         Please enter your city
                       </div>
                     )}
-                    <label htmlFor='country' className='white'>
+                    <label
+                      htmlFor='country'
+                      className='white'
+                    >
                       Country
                     </label>
                     <select
@@ -521,22 +619,35 @@ const Register = props => {
                       }
                       required
                     >
-                      <option value=''>-- Choose one --</option>
-                      {countries.map(country => (
-                        <option value={country.name} key={country.capital}>
-                          {country.name} (pop.{' '}
-                          {(country.population / 1000000).toFixed(2)}M)
-                        </option>
-                      ))}
+                      <option value=''>
+                        -- Choose one --
+                      </option>
+                      {
+                        countries.map(country => (
+                          <option
+                            value={country.name}
+                            key={country.capital}
+                          >
+                            {country.name} (pop.{' '}
+                            {(country.population / 1000000).toFixed(2)}M)
+                          </option>
+                        ))
+                      }
                     </select>
-                    {country ? (
-                      <div className='valid-feedback'>Looks good!</div>
+                    {
+                      country ? (
+                        <div className='valid-feedback'>
+                        Looks good!
+                      </div>
                     ) : (
                       <div className='invalid-feedback'>
                         Please select your country
                       </div>
                     )}
-                    <label htmlFor='zip' className='white'>
+                    <label
+                      htmlFor='zip'
+                      className='white'
+                    >
                       Zip Code
                     </label>
                     <input
@@ -551,14 +662,19 @@ const Register = props => {
                       value={zip}
                       required
                     />
-                    {zip ? (
-                      <div className='valid-feedback'>Looks good!</div>
+                    {
+                      zip ? (
+                        <div className='valid-feedback'>
+                        Looks good!
+                      </div>
                     ) : (
                       <div className='invalid-feedback'>
                         Please enter your zip code
                       </div>
                     )}
-                    <label htmlFor='phone mt-3'>Your phone number</label>
+                    <label htmlFor='phone mt-3'>
+                      Your phone number
+                    </label>
                     <div className='input-group'>
                       <div className='input-group-prepend'>
                         <span
@@ -580,8 +696,11 @@ const Register = props => {
                         value={phone}
                         required
                       />
-                      {phone ? (
-                        <div className='valid-feedback'>Looks good!</div>
+                      {
+                        phone ? (
+                          <div className='valid-feedback'>
+                          Looks good!
+                        </div>
                       ) : (
                         <div className='invalid-feedback'>
                           Please enter your phone number.
@@ -598,7 +717,9 @@ const Register = props => {
                       className='container-md scroller'
                       style={{ userSelect: 'none' }}
                     >
-                      <h2 className='white'>License, terms and conditions</h2>
+                      <h2 className='white'>
+                        License, terms and conditions
+                      </h2>
                       <p className='lead white'>
                         Lorem ipsum dolor sit amet, consectetur adipisicing
                         elit. Repellendus architecto ipsum eaque sit,
@@ -654,7 +775,10 @@ const Register = props => {
                         id='check'
                         required
                       />
-                      <label className='custom-control-label' htmlFor='check'>
+                      <label
+                        className='custom-control-label'
+                        htmlFor='check'
+                      >
                         I agree with the terms and conditions
                       </label>
                     </div>
@@ -663,9 +787,11 @@ const Register = props => {
                         check ? 'valid-feedback d-block' : 'invalid-feedback'
                       }
                     >
-                      {check
-                        ? 'Looks good!'
-                        : 'You must agree before submitting.'}
+                      {
+                        check
+                          ? 'Looks good!'
+                          : 'You must agree before submitting.'
+                      }
                     </div>
                   </div>
                 </div>
@@ -673,8 +799,13 @@ const Register = props => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <div style={{ marginTop: '30%' }}>
-                    <h2 className='white'>Add a security answer</h2>
-                    <label htmlFor='question' className='mt-2'>
+                    <h2 className='white'>
+                      Add a security answer
+                    </h2>
+                    <label
+                      htmlFor='question'
+                      className='mt-2'
+                    >
                       Choose a question
                     </label>
                     <select
@@ -689,14 +820,25 @@ const Register = props => {
                       }
                       required
                     >
-                      <option value=''>-- Choose one --</option>
-                      {questions.map(quest => (
-                        <option value={quest} key={quest}>
-                          {quest}
-                        </option>
-                      ))}
+                      <option value=''>
+                        -- Choose one --
+                      </option>
+                      {
+                          questions.map(
+                            quest => (
+                              <option
+                                value={quest}
+                                key={quest}
+                          >
+                                {quest}
+                              </option>
+                        ))
+                      }
                     </select>
-                    <label htmlFor='security' className='white mt-2'>
+                    <label
+                      htmlFor='security'
+                      className='white mt-2'
+                    >
                       Answer
                     </label>
                     <input
@@ -712,8 +854,11 @@ const Register = props => {
                       value={security}
                       required
                     />
-                    {security ? (
-                      <div className='valid-feedback'>Looks good!</div>
+                    {
+                      security ? (
+                        <div className='valid-feedback'>
+                        Looks good!
+                      </div>
                     ) : (
                       <div className='invalid-feedback'>
                         Please provide an answer to the question.
@@ -725,9 +870,16 @@ const Register = props => {
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
                   <article style={{ marginTop: '2rem' }}>
-                    <h2 style={{ marginBottom: '1rem' }} className='white'>
+                    <h2
+                      style={{ marginBottom: '1rem' }}
+                      className='white'
+                    >
                       Please take a picture of yourself for additional security
-                      (<b>compeletely optional</b>)
+                      (
+                        <b>
+                        compeletely optional
+                        </b>
+                      )
                     </h2>
                     <Camera
                       onCapture={blob => setImage(blob)}
@@ -742,47 +894,65 @@ const Register = props => {
               </div>
               <div className='carousel-item'>
                 <div className='w-75 h-100 m-auto'>
-                  <div style={{ marginTop: '20%' }}>
-                    <h2 style={{ marginBottom: '2rem' }}>
+                  <div style={{ marginTop: '10%' }}>
+                    <h2 style={{ marginBottom: '2rem' }} className='white'>
                       Overview of your information:
                     </h2>
-                    <ul className='list-group' style={{ marginBottom: '2rem' }}>
+                    <ul
+                      className='list-group'
+                      style={{ marginBottom: '2rem' }}
+                    >
                       <li className='overview-items list-group-item list-group-item-action'>
                         Name:{' '}
-                        {firstName && lastName ? (
-                          <span className='text-success'>
-                            {firstName} {lastName}
-                          </span>
+                        {firstName &&
+                          lastName ? (
+                            <span className='text-success'>
+                              {firstName} {lastName}
+                            </span>
                         ) : (
-                          <span className='text-danger'>No name given.</span>
+                          <span className='text-danger'>
+                            No name given.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         Sex:{' '}
                         {sex === 'm' ? (
-                          <span className='text-success'>male</span>
+                          <span className='text-success'>
+                            male
+                          </span>
                         ) : sex === 'f' ? (
-                          <span className='text-success'>female</span>
+                          <span className='text-success'>
+                            female
+                          </span>
                         ) : sex === 'n/a' ? (
                           <span className='text-success'>
                             didn't wish to specify
                           </span>
                         ) : (
-                          <span className='text-danger'>No gender given.</span>
+                          <span className='text-danger'>
+                            No gender given.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         E-mail:{' '}
                         {email ? (
-                          <span className='text-success'>{email}</span>
+                          <span className='text-success'>
+                            {email}
+                          </span>
                         ) : (
-                          <span className='text-danger'>No e-mail given.</span>
+                          <span className='text-danger'>
+                            No e-mail given.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         Username:{' '}
                         {username ? (
-                          <span className='text-success'>@{username}</span>
+                          <span className='text-success'>
+                            @{username}
+                          </span>
                         ) : (
                           <span className='text-danger'>
                             No username is currently set.
@@ -790,29 +960,55 @@ const Register = props => {
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
-                        From:{' '}
-                        {zip && city && country ? (
+                        Date of birth:{' '}
+                        {dob ? (
                           <span className='text-success'>
-                            {zip} - {city}, {country}
+                            <Moment format='DD.MM.YYYY.'>
+                              {dob}
+                            </Moment>
                           </span>
                         ) : (
-                          <span className='text-danger'>No location set.</span>
+                          <span className='text-danger'>
+                            No date of birth set.
+                          </span>
+                        )}
+                      </li>
+                      <li className='overview-items list-group-item list-group-item-action'>
+                        From:{' '}
+                        {zip &&
+                          city &&
+                          country ? (
+                            <span className='text-success'>
+                              {zip} - {city}, {country}
+                            </span>
+                        ) : (
+                          <span className='text-danger'>
+                            No location set.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         Security question:{' '}
                         {security ? (
-                          <span className='text-success'>{security}</span>
+                          <span className='text-success'>
+                            {security}
+                          </span>
                         ) : (
-                          <span className='text-danger'>No answer given.</span>
+                          <span className='text-danger'>
+                            No answer given.
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
                         Image taken for security:&nbsp;&nbsp;
                         {image ? (
-                          <span className='text-success'>yes</span>
+                          <span className='text-success'>
+                            yes
+                          </span>
                         ) : (
-                          <span className='text-danger'>no</span>
+                          <span className='text-danger'>
+                            no
+                          </span>
                         )}
                       </li>
                       <li className='overview-items list-group-item list-group-item-action'>
@@ -829,9 +1025,8 @@ const Register = props => {
                         )}
                       </li>
                     </ul>
-                    <input
+                    <button
                       type='submit'
-                      value='Sign me up!'
                       disabled={
                         !firstName ||
                         !lastName ||
@@ -848,7 +1043,10 @@ const Register = props => {
                         !phone
                       }
                       className='btn btn-lg btn-primary btn-block'
-                    />
+                    >
+                      <i className='fas fa-paper-plane' />
+                      &nbsp;&nbsp;Sign me up!
+                    </button>
                   </div>
                 </div>
               </div>
@@ -866,7 +1064,9 @@ const Register = props => {
                 className='carousel-control-prev-icon text-primary'
                 aria-hidden='true'
               />
-              <span className='sr-only'>Previous</span>
+              <span className='sr-only'>
+                Previous
+              </span>
             </a>
           )}
           {progress < 100 && (
@@ -881,7 +1081,9 @@ const Register = props => {
                 className='carousel-control-next-icon text-primary'
                 aria-hidden='true'
               />
-              <span className='sr-only'>Next</span>
+              <span className='sr-only'>
+                Next
+              </span>
             </a>
           )}
         </div>
